@@ -1,0 +1,38 @@
+version: '3.3'
+services:
+  php:
+    build: .
+    container_name: php-apache-laravel
+    hostname: laravel
+    environment:
+      - PHP_IDE_CONFIG=serverName=laravel
+      - XDEBUG_CONFIG=client_host=host.docker.internal
+      - XDEBUG_MODE=debug
+    networks:
+      - network-laravel
+    ports:
+      - '8080:80'
+    volumes:
+      - './projeto_laravel:/var/www/html/'
+      - './docker/apache/:/etc/apache2/sites-available/'
+      - './docker/php/php.ini:/usr/local/etc/php/php.ini'
+      - './docker/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini'
+  mysql:
+    container_name: db-mysql-laravel
+    environment:
+      - MYSQL_DATABASE=laravel
+      - MYSQL_USER=laravel
+      - MYSQL_ROOT_PASSWORD=root@2021
+      - MYSQL_PASSWORD=ccya@2021
+    image: 'mysql:5.7.16'
+    command: --explicit_defaults_for_timestamp
+    networks:
+      - network-laravel
+    ports:
+      - '3306:3306'
+    volumes:
+      - './dbdata/var/lib/mysql:/var/lib/mysql'
+      - './dbdata:/docker-entrypoint-initdb.d/'
+networks:
+  network-laravel:
+    driver: bridge
