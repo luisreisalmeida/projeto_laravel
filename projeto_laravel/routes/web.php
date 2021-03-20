@@ -20,3 +20,6 @@ Route::get('/series/criar', [SeriesController::class, 'create'])
     ->name('form_criar_serie');
 Route::post('/series/criar', [SeriesController::class, 'store']);
 Route::post('/series/remover/{id}', [SeriesController::class, 'destroy']);
+
+use App\Http\Controllers\TemporadasController;
+Route::get('/series/{serieId}/temporadas', [TemporadasController::class, 'index']);
